@@ -1288,6 +1288,10 @@ litehtml::position litehtml::render_item::get_placement() const
 
 std::shared_ptr<litehtml::render_item> litehtml::render_item::init()
 {
+	if (auto doc = src_el()->get_document())
+	{
+		doc->perf_note_render_item_init(src_el()->is_text(), src_el()->is_space());
+	}
     src_el()->add_render(shared_from_this());
 
     for(auto& el : children())

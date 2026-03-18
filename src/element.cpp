@@ -159,11 +159,16 @@ std::shared_ptr<render_item> element::create_render_item(const std::shared_ptr<r
 	{
 		ret = std::make_shared<render_item_flex>(shared_from_this());
 	}
-	if(ret)
-	{
-		if (css().get_display() == display_table ||
-			css().get_display() == display_inline_table ||
-			css().get_display() == display_table_caption ||
+		if(ret)
+		{
+			if (auto doc = get_document())
+			{
+				doc->perf_note_render_item_created(css().get_display(), is_text(), is_space());
+			}
+
+			if (css().get_display() == display_table ||
+				css().get_display() == display_inline_table ||
+				css().get_display() == display_table_caption ||
 			css().get_display() == display_table_cell ||
 			css().get_display() == display_table_column ||
 			css().get_display() == display_table_column_group ||
@@ -482,6 +487,9 @@ bool element::is_comment() const													LITEHTML_RETURN_FUNC(false)
 bool element::is_body() const														LITEHTML_RETURN_FUNC(false)
 bool element::is_break() const														LITEHTML_RETURN_FUNC(false)
 bool element::is_text() const														LITEHTML_RETURN_FUNC(false)
+bool element::has_trailing_white_space() const										LITEHTML_RETURN_FUNC(false)
+pixel_t element::trim_trailing_white_space()										LITEHTML_RETURN_FUNC(0)
+void element::restore_trailing_white_space()										LITEHTML_EMPTY_FUNC
 
 bool element::on_mouse_over()														LITEHTML_RETURN_FUNC(false)
 bool element::on_mouse_leave()														LITEHTML_RETURN_FUNC(false)
